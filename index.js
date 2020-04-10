@@ -18,6 +18,8 @@ app.get('/', (req, res) => {
 
 app.get('/search', (req, res) => {
     console.log(req.query.query, process.env.OMDB_API_KEY)
+    //display current page number of results
+    let page = req.query.page || 1
     let url = `http://www.omdbapi.com/?s=${req.query.query}&apikey=${process.env.OMDB_API_KEY}`
     console.log(url)
     //grab the url from the input
@@ -25,7 +27,7 @@ app.get('/search', (req, res) => {
     .then(response => response.json())
     .then(data => {
         console.log(data)
-        res.render('results', { results: data.Search, query: req.query.query})
+        res.render('results', { results: data.Search, query: req.query.query, page: parseInt(page)})
     })
     .catch(ERR => {
         console.log('an error!~', err)
